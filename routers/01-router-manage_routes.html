@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Backbone View</title>
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css" />
+		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+		<script type="text/javascript">
+			$( document ).bind( "mobileinit",
+				// Set up the "mobileinit" handler before requiring jQuery Mobile's module
+				function() {
+					// Prevents all anchor click handling including the addition of active button state and alternate link bluring.
+					$.mobile.linkBindingEnabled = false;
+					// Disabling this will prevent jQuery Mobile from handling hash changes
+					$.mobile.hashListeningEnabled = false;
+				}
+			);
+		</script>
+		<script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
+		<script src="../js/underscore.js"></script>
+		<script src="../js/backbone.js"></script>
+</head>
+<body>
+	<script type="text/template" id="template">
+		<div data-role="page" id="page1">
+			<div data-role="header">
+				<a href="#" class="reset">Réinitialiser</a>
+				<h1>JQM + Require + Backbone</h1>
+			</div>
+			<div data-role="content">
+				<ul data-role="listview" data-inset="true">
+				<% if (null !== collection) { %>
+					<% _.each( collection.toJSON(), function( contact, id ) { %>
+						<li class="ui-li ui-li-static ui-btn-up-c ui-corner-top">
+							<a href="#detail/<%= contact.id %>"><%= contact.firstname + " " + contact.lastname %></a>
+						</li>
+					<% }); %>
+				<% } %>
+				</ul>
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<h4>Liste de contacts</h4>
+			</div>
+		</div>
+	</script>
+	<script type="text/javascript">
+		var ContactModel = Backbone.Model.extend({
+			defaults: {
+				firstname: '',
+				lastname: '',
+				birthday: '',
+				phone: '',
+				email: '',
+				weight: ''
+			}
+		});
+		
+		var ContactCollection = Backbone.Collection.extend({
+			model: ContactModel
+		});
+		
+		var one = new ContactModel({
+			id: 123,
+			lastname: 'DERUE',
+			firstname: 'CEDRIC',
+			birthday: '1976-12-30',
+			phone: '0456981700',
+			email: 'cedric.derue@gmail.com',
+			weight: 80
+		});
+		
+		var other = new ContactModel({
+			id: 456,
+			lastname: 'DURDAND',
+			firstname: 'Caroline',
+			birthday: '1979-11-28',
+			phone: '0498977711',
+			email: 'caroline.durdand@hotmail.fr',
+			weight: 65
+		});
+		
+		var contactCollection = new ContactCollection([one, other]);
+		
+		var ContactListView = Backbone.View.extend({
+			initialize: function() {
+				this.render();
+			},
+			
+			render: function() {
+				// Compilation du template
+				var template = _.template($('#template').html(), this);
+				// Insertion du rendu HTML
+				this.$el.html(template);
+			}
+		});
+		
+		var AppRouter = Backbone.Router.extend({
+			routes: {
+				''          : 'homeAction',
+				'detail/:id': 'detailAction'
+			},
+			
+			homeAction: function() {
+				var contactListView = new ContactListView({el:$('body'), collection: contactCollection});
+			},
+			
+			detailAction: function(id) {
+				alert("Vous avez sélectionné le contact avec l'identifiant " + id);
+			}
+		});
+
+		var router = new AppRouter();
+		Backbone.history.start();
+	</script>
+</body>
+</html>

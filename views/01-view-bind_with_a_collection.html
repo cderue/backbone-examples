@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Lier les données d'une collection à une vue</title>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="../js/underscore.js"></script>
+	<script src="../js/backbone.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+</head>
+<body>
+	<script type="text/template" id="template">
+		<div data-role="page" id="page1">
+			<div data-role="header">
+				<a href="#" class="reset">Réinitialiser</a>
+				<h1>Vue Backbone</h1>
+			</div>
+			<div data-role="content">
+			<% if (null !== contact) { %>
+				<form action="#">
+					<input type="text" placeholder="Nom" value="<%= model.lastname %>" required />
+					<input type="text" placeholder="Prénom" value="<%= model.firstname %>" required />
+					<input type="date" placeholder="Date de naissance" value="<%= model.birthday %>" />
+					<input type="tel" placeholder="Téléphone" value="<%- model.phone %>" pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-|)?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x|ext)\d{1,5}){0,1}$" />
+					<input type="email" placeholder="Courriel" value="<%- model.email %>" />
+					<input type="number" placeholder="Poids" value="<%= model.weight %>" />
+					<input type="submit" value="Créer" />
+			</form>
+			<% } %>
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<h4>Edition d'un contact</h4>
+			</div>
+		</div>
+	</script>
+	<script type="text/javascript">
+		var contact = {
+			lastname: 'DERUE',
+			firstname: 'CEDRIC',
+			birthday: '1976-12-30',
+			phone: '0456981700',
+			email: 'cedric.derue@gmail.com',
+			weight: 80
+		};
+		
+		var ContactView = Backbone.View.extend({
+
+			initialize: function() {
+				this.render();
+			},
+			
+			events: {
+				'click .reset': 'handleReset'
+			},
+			
+			handleReset: function() {
+				this.$el.find('form :input').each(function() {
+					this.value = '';
+				});
+			},
+			
+			render: function() {
+				// Compilation du template
+				var template = _.template($('#template').html(), this);
+				// Insertion du rendu HTML
+				this.$el.html(template);
+			}
+		});
+		
+		var contactView = new ContactView({el: $('body'), model: contact});
+	</script>
+</body>
+</html>

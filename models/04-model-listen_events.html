@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Ecouter les événements d'un modèle</title>
+	<script src="../js/jquery.js"></script>
+	<script src="../js/underscore.js"></script>
+	<script src="../js/backbone.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		var TaskModel = Backbone.Model.extend({
+			defaults: {
+			object: '',
+			period: {
+				beginning: null,
+				end: null
+			},
+			category: null,
+			status: 0,
+			priority: 1,
+		},
+			initialize: function() {
+				console.log("Instanciation d'une nouvelle tâche");
+				
+				// Ecoute tous les événements "change"
+				this.on('change', function() {
+					console.log("La tâche a été modifiée.");
+				});
+			}
+		});
+
+		// Instanciation d'une nouvelle tâche
+		var myTask = new TaskModel({object: 'Passer au supermarché', priority: 1});
+
+		// Déclenche l'événement 'change'
+		myTask.set('object', 'Passer au pressing');
+
+		// Déclenche l'événement 'change'
+		myTask.set('priority', 2);
+	</script>
+</body>
+</html>
+

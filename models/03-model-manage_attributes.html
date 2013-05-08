@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Accéder aux attributs d'un modèle</title>
+	<script src="../js/jquery.js"></script>
+	<script src="../js/underscore.js"></script>
+	<script src="../js/backbone.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		var TaskModel = Backbone.Model.extend({
+			defaults: {
+			object: '',
+			period: {
+				beginning: null,
+				end: null
+			},
+			category: null,
+			status: 0,
+			priority: 1,
+		},
+			initialize: function() {
+				console.log("Instanciation d'une nouvelle tâche");
+			}
+		});
+
+		// Instanciation d’un nouveau modèle TaskModel
+		var myTask = new TaskModel();
+
+		// Écriture d’une propriété du modèle
+		myTask.set('object', 'Passer au pressing');
+
+		// Lecture d’une propriété du modèle
+		console.log("L'objet de ma tâche est : " + myTask.get('object'));
+
+		// Conversion du modèle en objet JavaScript
+		var task = myTask.toJSON();
+
+		// Affichage de l'objet JavaScript
+		console.log(task);
+	</script>
+</body>
+</html>

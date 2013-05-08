@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Parcourir les éléments d'une collection</title>
+	<script src="../js/jquery.js"></script>
+	<script src="../js/underscore.js"></script>
+	<script src="../js/backbone.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		var TaskModel = Backbone.Model.extend({
+			defaults: {
+				object: '',
+				period: {
+					beginning: null,
+					end: null
+				},
+				category: null,
+				status: 0,
+				priority: 1,
+			},
+			initialize: function() {
+				console.log("Instanciation d'une nouvelle tâche");
+			}
+		});
+
+		var TasksCollection = Backbone.Collection.extend({
+			// Permet de travailler sur un groupe de tâches
+			model: TaskModel,
+			
+			// Fonction appelée lors de la construction de la collection
+			initialize: function() {
+				console.log("Instanciation d'une nouvelle collection de tâches");
+			}
+		});
+
+		// Instanciation d'une première tâche
+		var firstTask = new TaskModel({object: 'Faire le ménage', priority: 2});
+
+		// Instanciation d'une deuxième tâche
+		var secondTask = new TaskModel({object: 'Passer au pressing', priority: 1});
+
+		// Instanciation d’une nouvelle collection TasksCollection
+		var tasks = new TasksCollection([firstTask, secondTask]);
+
+		// Parcours des éléments de la collection
+		tasks.forEach(function(model) {
+			console.log(model.toJSON());
+		});
+
+		// Transformation de l'objet de chaque tâche en lettres capitales
+		var mappedTasks = tasks.map(function(model) {
+			return model.get('object').toUpperCase();
+		});
+
+		// Affichage des données transformées dans la console
+		console.log(mappedTasks);
+	</script>
+</body>
+</html>

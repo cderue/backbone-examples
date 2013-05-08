@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Valider les données d'un modèle</title>
+	<script src="../js/jquery.js"></script>
+	<script src="../js/underscore.js"></script>
+	<script src="../js/backbone.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		var TaskModel = Backbone.Model.extend({
+			defaults: {
+				object: '',
+				period: {
+					beginning: null,
+					end: null
+				},
+				category: null,
+				status: 0,
+				priority: 1
+			},
+
+			initialize: function() {
+				this.on('invalid', function(model, errors) {
+					console.log(errors);
+				});
+			},
+
+			/**
+			 * Valide les données du modèle : ne retourne rien si le modèle 
+			 * est valide sinon retourne un tableau d’erreurs
+			 */
+			validate: function(attrs) {
+				var errors = this.errors = [];
+
+				if (!attrs.object) {
+					errors.push('INVALID_OBJECT');
+				}
+
+				if (attrs.period && attrs.period.beginning && attrs.period.end) {
+					var beginningDate = Date.parse(beginning);
+					var endDate = Date.parse(end);
+					if (beginningDate > endDate) {
+						errors.push('INVALID_PERIOD');
+					}
+				}
+
+				var validStatus = [0, 1, 2];
+				var statusIsValid = function(attrs) {
+					return _(validStatus).include(attrs.status);
+				};
+				if (!statusIsValid(attrs)) {
+					errors.push('INVALID_STATUS');
+				}
+
+				var validPriorities = [0, 1, 2];
+				var priorityIsValid = function(attrs) {
+					return _(validPriorities).include(attrs.priority);
+				};
+				if (!priorityIsValid(attrs)) {
+					errors.push('INVALID_PRIORITY');
+				}
+
+				if (errors.length > 0) {
+					return errors;
+				}
+			}
+		});
+
+		// Instanciation d'un nouvelle tâche
+		var myTask = new TaskModel({object: 'Passer au supermarché', priority: 1});
+
+		// Déclenche la validation -> KO
+		myTask.set('priority', 4, {validate:true});
+
+		// Déclenche la validation -> OK
+		myTask.set('priority', 2, {validate:true});
+	</script>
+</body>
+</html>

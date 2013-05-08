@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Manipuler une collection</title>
+	<script src="../js/jquery.js"></script>
+	<script src="../js/underscore.js"></script>
+	<script src="../js/backbone.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		var TaskModel = Backbone.Model.extend({
+			defaults: {
+			object: '',
+			period: {
+				beginning: null,
+				end: null
+			},
+			category: null,
+			status: 0,
+			priority: 1,
+		},
+			initialize: function() {
+				console.log("Instanciation d'une nouvelle tâche");
+			}
+		});
+
+		var TasksCollection = Backbone.Collection.extend({
+			// Permet de travailler sur un groupe de tâches
+			model: TaskModel,
+			
+			// Fonction appelée lors de la construction de la collection
+			initialize: function() {
+				console.log("Instanciation d'une nouvelle collection de tâches");
+			}
+		});
+
+		// Instanciation d’une nouvelle collection TasksCollection
+		var tasks = new TasksCollection();
+
+		// Instanciation d'une tâche
+		var myTask = new TaskModel({object: 'Faire le ménage'});
+
+		// Ajout de la tâche à la collection
+		tasks.add(myTask);
+
+		// Sélection de la tâche dans la collection
+		var selectedTask = tasks.at(0);
+
+		// Affichage de la tâche dans la console
+		console.log(selectedTask.toJSON());
+
+		// Ajout d'une tâche à l'index spécifié
+		tasks.add(new TaskModel(), {at: 1});
+
+		// Suppression de la première tâche
+		tasks.remove(myTask);
+
+		// Affichage de la collection dans la console
+		console.log(tasks.toJSON());
+	</script>
+</body>
+</html>

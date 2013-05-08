@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Instanciation d'un modèle</title>
+	<script src="../js/jquery.js"></script>
+	<script src="../js/underscore.js"></script>
+	<script src="../js/backbone.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		var TaskModel = Backbone.Model.extend({
+			defaults: {
+			object: '',
+			period: {
+				beginning: null,
+				end: null
+			},
+			category: null,
+			status: 0,
+			priority: 1,
+		},
+			initialize: function() {
+				console.log("Instanciation d'une nouvelle tâche");
+			}
+		});
+
+		// Instanciation d’un nouveau modèle TaskModel
+		var myTask = new TaskModel();
+
+		// Affiche le modèle dans la console
+		console.log(myTask);
+	</script>
+</body>
+</html>
